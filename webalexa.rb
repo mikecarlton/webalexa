@@ -5,7 +5,12 @@
 
 require 'sinatra'
 
+set :haml, :format => :html5
+
 get '/' do
-  "Hello World!"
+  send_file File.expand_path('index.html', settings.public_folder)
 end
 
+put '/do' do
+  $stderr.puts "playing #{params.inspect}"
+end

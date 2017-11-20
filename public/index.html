@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+  Copyright (c) 2017 Mike Carlton
+  Released under terms of the MIT license:
+    http://www.opensource.org/licenses/mit-license
+-->
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Alexa Commands</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/clips.js"></script>
+
+    <style>
+      body {
+        margin: 20px;
+      }
+
+      .wrapper {
+        display: grid;
+        /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
+        grid-template-columns: repeat(auto-fill, 120px);
+        grid-gap: 20px;
+        background-color: #fff;
+        color: #444;
+      }
+
+      .box {
+        cursor: pointer;
+        background-color: #444;
+        color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        font-size: 120%;
+      }
+    </style>
+  </head>
+  <body>
+
+  <div>
+    <p>
+      <input type="checkbox" id="echo"><label for="echo">&nbsp;Echo commands</label>
+    </p>
+  </div>
+
+  <div id='commands' class="wrapper"></div>
+
+  <script>
+    for (var i=0, len=clips.length; i<len; i++) {
+      var $div = $("<div />", {
+                      id: i,
+                      "class": "box",
+                      text: clips[i].label,
+                      click: function(){ sendclip(this) }
+                      })
+      $('#commands').append($div);
+    }
+  </script>
+
+  <script>
+
+    function b64toBlob(b64Data, contentType, sliceSize) {
+      contentType = contentType || '';
+      sliceSize = sliceSize || 512;
+
+      var byteCharacters = atob(b64Data);
+      var byteArrays = [];
+
+      for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+      }
+
+      var blob = new Blob(byteArrays, { type: contentType });
+      return blob;
+    }
+
+    function sendclip(self) {
+      var clip = clips[self.id]
+
+      var audio = document.getElementById('AudioElement') || new Audio()
+
+      if ($('#echo').is(':checked')) {
+        audio.src = 'data:audio/wav;base64,' + clip.data
+alert("playing: " + $('#echo').is(':checked') + " data length: " + clip.data.length)
+        audio.play()
+      }
+
+      var xhr = new XMLHttpRequest()
+      xhr.open('PUT', '/do')
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+      xhr.responseType = 'blob'
+      xhr.onload = function(evt) {
+        if (xhr.status == 200) {
+            var blob = new Blob([xhr.response], { type: 'audio/wav' })
+            var objectUrl = URL.createObjectURL(blob)
+
+            audio.src = objectUrl
+            audio.onload = function(evt) {
+                URL.revokeObjectUrl(objectUrl)
+            }
+            audio.play()
+        } else {
+          alert("Something went wrong, got back status " + xhr.status)
+        }
+      }
+      xhr.send(JSON.stringify({ clip_id: self.id }))
+    }
+  </script>
+
+  </body>
+</html>
+<!--
+vim: ts=2:sw=2:sts=2:et
+-->

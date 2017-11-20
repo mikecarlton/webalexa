@@ -5,8 +5,13 @@ GEM
     eventmachine (1.2.5)
     foreman (0.84.0)
       thor (~> 0.19.1)
+    haml (5.0.4)
+      temple (>= 0.8.0)
+      tilt
     mustermann (1.0.1)
     rack (2.0.3)
+    rack-contrib (1.2.0)
+      rack (>= 0.9.1)
     rack-protection (2.0.0)
       rack
     sinatra (2.0.0)
@@ -14,6 +19,7 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.0)
       tilt (~> 2.0)
+    temple (0.8.0)
     thin (1.7.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -26,6 +32,8 @@ PLATFORMS
 
 DEPENDENCIES
   foreman
+  haml
+  rack-contrib
   sinatra
   thin
 

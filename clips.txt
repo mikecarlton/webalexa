@@ -1,0 +1,11 @@
+TV On
+TV Off
+TV Channel Down
+TV Channel Up
+Volume Down
+Volume Up
+TV Pause
+Mute the TV
+Unmute the TV
+Turn on ESPN
+Tell Me a Joke
