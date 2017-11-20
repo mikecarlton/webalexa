@@ -47,5 +47,6 @@ then
 `heroku open`
 
 ## Run the App Locally
-`heroku local`
-
+`foreman start`
+or
+`bundle exec rackup -p 5000 config.ru` (but the rackup method does not load config vars from .env)

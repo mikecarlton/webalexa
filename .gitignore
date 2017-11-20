@@ -3,9 +3,4 @@
 # Released under terms of the MIT license:
 #   http://www.opensource.org/licenses/mit-license
 
-source 'https://rubygems.org'
-ruby '2.4.2'
-
-gem 'sinatra'
-gem 'thin'
-gem 'foreman'
+.env
