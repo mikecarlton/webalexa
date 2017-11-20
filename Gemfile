@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2017 Mike Carlton
-# Released under terms of the MIT license: 
+# Released under terms of the MIT license:
 #   http://www.opensource.org/licenses/mit-license
 
 source 'https://rubygems.org'
