@@ -87,12 +87,14 @@
 
     function sendclip(self) {
       var clip = clips[self.id]
+      var playing = false
 
       var audio = document.getElementById('AudioElement') || new Audio()
 
       if ($('#echo').is(':checked')) {
         audio.src = 'data:audio/wav;base64,' + clip.data
-alert("playing: " + $('#echo').is(':checked') + " data length: " + clip.data.length)
+        audio.addEventListener('ended', function () { playing = false })
+        playing = true
         audio.play()
       }
 
@@ -102,18 +104,22 @@ alert("playing: " + $('#echo').is(':checked') + " data length: " + clip.data.len
       xhr.responseType = 'blob'
       xhr.onload = function(evt) {
         if (xhr.status == 200) {
-            var blob = new Blob([xhr.response], { type: 'audio/wav' })
-            var objectUrl = URL.createObjectURL(blob)
+          if (playing) {
+            alert("still playing?!")
+          }
+          var blob = new Blob([xhr.response], { type: 'audio/wav' })
+          var objectUrl = URL.createObjectURL(blob)
 
-            audio.src = objectUrl
-            audio.onload = function(evt) {
-                URL.revokeObjectUrl(objectUrl)
-            }
-            audio.play()
-        } else {
+          audio.src = objectUrl
+          audio.onload = function(evt) {
+              URL.revokeObjectUrl(objectUrl)
+          }
+          audio.play()
+        } else if (xhr.status != 202) {
           alert("Something went wrong, got back status " + xhr.status)
         }
       }
+
       xhr.send(JSON.stringify({ clip_id: self.id }))
     }
   </script>
