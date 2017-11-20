@@ -13,6 +13,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/clips.js"></script>
 
+    <script>
+      $(document).ready(function() {
+        $.each(clips, function(key, val) {
+          var $div = $("<div />", {
+                          id: key,
+                          "class": "box",
+                          text: val.label,
+                          click: function(){ doClip(this) }
+                       })
+          $('#commands').append($div);
+        })
+      })
+    </script>
+
     <style>
       body {
         margin: 20px;
@@ -48,44 +62,7 @@
   <div id='commands' class="wrapper"></div>
 
   <script>
-    for (var i=0, len=clips.length; i<len; i++) {
-      var $div = $("<div />", {
-                      id: i,
-                      "class": "box",
-                      text: clips[i].label,
-                      click: function(){ sendclip(this) }
-                      })
-      $('#commands').append($div);
-    }
-  </script>
-
-  <script>
-
-    function b64toBlob(b64Data, contentType, sliceSize) {
-      contentType = contentType || '';
-      sliceSize = sliceSize || 512;
-
-      var byteCharacters = atob(b64Data);
-      var byteArrays = [];
-
-      for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        var byteArray = new Uint8Array(byteNumbers);
-
-        byteArrays.push(byteArray);
-      }
-
-      var blob = new Blob(byteArrays, { type: contentType });
-      return blob;
-    }
-
-    function sendclip(self) {
+    function doClip(self) {
       var clip = clips[self.id]
       var playing = false
 

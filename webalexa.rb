@@ -12,6 +12,20 @@ get '/' do
 end
 
 put '/do' do
-  $stderr.puts "playing #{params.inspect}"
+  # File is javascript so we can load in browser easily (for playing)
+  data = File.read(File.expand_path('js/clips.js', settings.public_folder))
+
+  # we make it valid json so we can easily load same data here
+  data.sub!(/^[^\[]*/, '')    # remove leading "clips = "
+  clips = JSON.parse(data)
+
+  id = Integer(params['clip_id']) rescue nil
+  if !id || id < 0 || id >= clips.length
+    return 404
+  end
+
+  clip = clips[id]
+  $stderr.puts "playing clip #{clip['label']}"
+
   202       # until we really do return an audio clip
 end

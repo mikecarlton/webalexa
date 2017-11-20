@@ -7,16 +7,24 @@ TARGET="public/js/clips.js"
 PROG=`basename $0`
 TMPFILE=`mktemp /tmp/${PROG}.XXXXXX` || exit 1
 
-echo "clips = [ ] ;" > "$TARGET"
+# file must be valid json after removing "clips = "
+echo "clips = [" > "$TARGET"
 
+first=t
 while read clip ; do
   echo "${clip}"
   say -o "${TMPFILE}.wav" $OPTIONS "$clip"
+  if [ -z "$first" ] ; then
+    echo -n ", " >> $TARGET
+  fi
+  first=""
   cat >>"$TARGET" <<END
-clips.push({
+{
   "label": "${clip}",
   "data": "$(base64 < ${TMPFILE}.wav)"
-  });
+}
 END
   rm "${TMPFILE}.wav"
 done < "$SOURCE"
+
+echo "]" >> "$TARGET"
