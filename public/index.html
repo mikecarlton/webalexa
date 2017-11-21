@@ -12,6 +12,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/clips.js"></script>
+    <script src="js/jquery.growl.js" type="text/javascript"></script>
+    <link href="css/jquery.growl.css" rel="stylesheet" type="text/css" />
 
     <script>
       $(document).ready(function() {
@@ -98,6 +100,7 @@
       }
 
       xhr.send(JSON.stringify({ clip_id: self.id }))
+      $.growl({ title: clip.label, message: '', location: 'br', duration: 1000 });
     }
   </script>
 
