@@ -11,3 +11,8 @@ gem 'rack-contrib'
 gem 'thin'
 gem 'foreman'
 gem 'haml'
+gem 'oauth2'
+
+group :development do
+  gem 'byebug'
+end
