@@ -45,6 +45,7 @@ end
 
 def redirect_uri
   uri = URI.parse(request.url)
+  puts $stderr.puts $uri.scheme, $uri.to_s
   uri.path = '/code'
   uri.query = nil
   uri.to_s
@@ -55,7 +56,7 @@ get '/' do
 end
 
 get '/login' do
-  mac = `/sbin/ifconfig | grep ether | head -1`
+  mac = `ifconfig | grep ether | head -1` || '1'
   mac.gsub!(/ether|\s+/, '')
   session[:state] = SecureRandom.hex(32)
   scope_data = { 'alexa:all' => {
