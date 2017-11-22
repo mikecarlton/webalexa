@@ -7,8 +7,16 @@ require 'sinatra'
 require 'oauth2'
 require 'json'
 
-enable :sessions
-set :sessions, expire_after: 86_400*30
+configure :production do
+  use Rack::SslEnforcer
+end
+
+# can't use "enable :session" as SslEnforcer needs to be first
+set :session_secret, ENV['SESSION_SECRET']
+use Rack::Session::Cookie, key: 'rack.session',
+                           path: '/',
+                           expire_after: 86_400 * 30,
+                           secret: settings.session_secret
 
 set :haml, :format => :html5
 
@@ -45,7 +53,6 @@ end
 
 def redirect_uri
   uri = URI.parse(request.url)
-  puts $stderr.puts $uri.scheme, $uri.to_s
   uri.path = '/code'
   uri.query = nil
   uri.to_s
