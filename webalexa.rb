@@ -6,6 +6,7 @@
 require 'sinatra'
 require 'oauth2'
 require 'json'
+require 'rack/ssl-enforcer'
 
 configure :production do
   use Rack::SslEnforcer
