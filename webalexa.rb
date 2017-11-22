@@ -64,13 +64,11 @@ get '/' do
 end
 
 get '/login' do
-  mac = `ifconfig | grep ether | head -1` || '1'
-  mac.gsub!(/ether|\s+/, '')
   session[:state] = SecureRandom.hex(32)
   scope_data = { 'alexa:all' => {
                     productID: 'webalexa',
                     productInstanceAttributes: {
-                      deviceSerialNumber: '1234' } } }
+                      deviceSerialNumber: '1' } } }
   location = client.auth_code.authorize_url(scope: 'alexa:all',
                                             scope_data: scope_data.to_json,
                                             response_type: 'code',
