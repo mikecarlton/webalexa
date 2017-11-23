@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     byebug (9.1.0)
+    curb (0.9.4)
     daemons (1.2.5)
     eventmachine (1.2.5)
     faraday (0.12.2)
@@ -46,6 +47,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  curb
   foreman
   haml
   oauth2

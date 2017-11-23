@@ -12,6 +12,7 @@ gem 'thin'
 gem 'foreman'
 gem 'haml'
 gem 'oauth2'
+gem 'curb'
 gem 'rack-ssl-enforcer'
 
 group :development do
